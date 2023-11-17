@@ -17,7 +17,7 @@ class EmployeesController extends Controller
                 'message' => 'Data is Empty',
                 'data' => []
             ];
-            return response()->json($data, 204);
+            return response()->json($data, 200);
         }
         //mengirim data ke view employees
         $data = [
@@ -42,7 +42,7 @@ class EmployeesController extends Controller
         }
         //mengirim data ke view employees
         $data = [
-            'message' => 'Get Resource By ID',
+            'message' => 'Get Detail Resource',
             'data' => $employees
         ];
         // kirim Data dan response code
@@ -78,7 +78,7 @@ class EmployeesController extends Controller
 
         // buat response data
         $data = [
-            'message' => 'Resource Created',
+            'message' => 'Resource is added successfully',
             'data' => $employees
         ];
         // Kirim Response Code
@@ -109,7 +109,7 @@ class EmployeesController extends Controller
         ]);
         // buat response data
         $data = [
-            'message' => 'Resource Updated',
+            'message' => 'Resource is Update successfully',
             'data' => $employees
         ];
         // Kirim Response Code
@@ -131,7 +131,91 @@ class EmployeesController extends Controller
         $employees->delete();
         // buat response data
         $data = [
-            'message' => 'Resource Deleted',
+            'message' => 'Resource is Delete successfully',
+            'data' => $employees
+        ];
+        // Kirim Response Code
+        return response()->json($data, 200);
+    }
+
+    // membuat method search berdasarkkan name
+    public function search(Request $request)
+    {
+        // cari resource berdasarkan name
+        $employees = Employees::where('name', 'like', '%' . $request->name . '%')->get();
+        if ($employees->isEmpty()) {
+            $data = [
+                'message' => 'Resource Not Found',
+                'data' => []
+            ];
+            return response()->json($data, 404);
+        }
+        // buat response data
+        $data = [
+            'message' => 'Resource not found',
+            'data' => $employees
+        ];
+        // Kirim Response Code
+        return response()->json($data, 200);
+    }
+
+    // mendapatkan resource yang aktif  
+    public function active()
+    {
+        // cari resource berdasarkan status
+        $employees = Employees::where('status', 1)->get();
+        if ($employees->isEmpty()) {
+            $data = [
+                'message' => 'Resource Not Found',
+                'data' => []
+            ];
+            return response()->json($data, 404);
+        }
+        // buat response data
+        $data = [
+            'message' => 'Get Active resource',
+            'data' => $employees
+        ];
+        // Kirim Response Code
+        return response()->json($data, 200);
+    }
+
+    // mendapatkan resource yang tidak aktif
+    public function inactive()
+    {
+        // cari resource berdasarkan status
+        $employees = Employees::where('status', 0)->get();
+        if ($employees->isEmpty()) {
+            $data = [
+                'message' => 'Resource Not Found',
+                'data' => []
+            ];
+            return response()->json($data, 404);
+        }
+        // buat response data
+        $data = [
+            'message' => 'Get inactive Resource',
+            'data' => $employees
+        ];
+        // Kirim Response Code
+        return response()->json($data, 200);
+    }
+
+    // mendapatkan resource yang di hentikan
+    public function terminated()
+    {
+        // cari resource berdasarkan status
+        $employees = Employees::where('status', 2)->get();
+        if ($employees->isEmpty()) {
+            $data = [
+                'message' => 'Resource Not Found',
+                'data' => []
+            ];
+            return response()->json($data, 404);
+        }
+        // buat response data
+        $data = [
+            'message' => 'Get terminated resource',
             'data' => $employees
         ];
         // Kirim Response Code
